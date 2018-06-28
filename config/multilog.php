@@ -2,6 +2,7 @@
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 return [
     'defaultChannel' => 'app',
@@ -14,11 +15,14 @@ return [
                 return $logger;
             }
 
-            $logger->pushHandler(new RotatingFileHandler(
+            /*$logger->pushHandler(new RotatingFileHandler(
                 storage_path('/logs/app.log'),
                 7, // days
                 Logger::INFO
-            ));
+            ));*/
+
+            $logger->pushHandler(new StreamHandler('php://stderr', Logger::INFO));
+            $logger->pushHandler(new StreamHandler('php://stderr', Logger::DEBUG));
 
             if (env('APP_DEBUG', false)) {
                 $logger->pushHandler(new RotatingFileHandler(
