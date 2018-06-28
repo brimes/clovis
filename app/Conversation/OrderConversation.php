@@ -6,8 +6,6 @@ use BotMan\BotMan\Messages\Conversations\Conversation;
 class OrderConversation extends Conversation
 {
 	protected $cnpj;
-	protected $topping;
-    protected $address;
     
 	public function run()
 	{

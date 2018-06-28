@@ -17,7 +17,7 @@ class TelegramBootstrapService extends ClovisAbstractBootstrapService {
 
     public function flow() {
 
-        $this->botman->hears('([a-zA-Z]+)', function (BotMan $bot) {
+        $this->botman->hears('([a-zA-Z 0-9]+)', function (BotMan $bot) {
             $bot->startConversation(new OrderConversation());
         });
         
