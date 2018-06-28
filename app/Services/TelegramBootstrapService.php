@@ -1,6 +1,8 @@
 <?php
 namespace App\Services;
 
+use BotMan\BotMan\BotMan;
+
 class TelegramBootstrapService extends ClovisAbstractBootstrapService {
 
     public function __construct(){
