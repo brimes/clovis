@@ -34,7 +34,10 @@ class TradeToolsClient extends AbstractClient
             }
         }')->orderStatus;
         
-        
+        if(!$statusOrder){
+            throw new \Exception();
+        }
+
         return $statusOrder;
     }
 
