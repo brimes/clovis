@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use BotMan\BotMan\BotMan;
+use App\Conversation\OrderConversation;
 
 class TelegramBootstrapService extends ClovisAbstractBootstrapService {
 
@@ -16,6 +17,11 @@ class TelegramBootstrapService extends ClovisAbstractBootstrapService {
 
     public function flow() {
 
+        $this->botman->hears('([a-zA-Z]+)', function (BotMan $bot) {
+            $bot->startConversation(new OrderConversation());
+        });
+        
+        /*
         // Give the bot something to listen for.
         $this->botman->hears('Ola', function (BotMan $bot) {
             //$ttClient = new App\GraphQL\Client\TradeToolsClient('');
@@ -28,7 +34,7 @@ class TelegramBootstrapService extends ClovisAbstractBootstrapService {
             //$bot->reply('Hello: ' . $ttClient->getStatusOrder("42225938007839"));
             $bot->reply('O seu cnpj é ' . $number);
         });
-
+        */
         
 
     }
