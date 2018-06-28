@@ -16,7 +16,8 @@
         "laravel/tinker": "*",
         "botman/botman" : "2.2.*",
         "botman/driver-telegram" : "^1.5",
-        "doctrine/cache" : "^1.6"
+        "doctrine/cache" : "^1.6",
+        "ext-redis" : "*"
     },
     "require-dev": {
         "codedungeon/phpunit-result-printer": "*",
