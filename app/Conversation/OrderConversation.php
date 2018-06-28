@@ -13,7 +13,7 @@ class OrderConversation extends Conversation
 		$this->ask('Ola, qual o seu CNPJ?', function(Answer $question) {
             try {
                 $this->cnpj = $question->getText();
-                $this->say("1 minuto, estou procurando o seu pedido");
+                $this->say("Aguarde 1 minuto, estou procurando o seu pedido");
             
                 $ttClient = new \App\GraphQL\Client\TradeToolsClient();
                 $status = $ttClient->getStatusOrder($this->cnpj);
