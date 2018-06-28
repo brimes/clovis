@@ -2,16 +2,17 @@
 namespace App\Conversation;
 
 use BotMan\BotMan\Messages\Conversations\Conversation;
-	
+use BotMan\BotMan\Messages\Incoming\Answer;
+
 class OrderConversation extends Conversation
 {
 	protected $cnpj;
     
 	public function run()
 	{
-		$this->ask('Ola, qual o número do seu CNPJ?', function($cnpj) {
+		$this->ask('Ola, qual o seu CNPJ do PDV?', function(Answer $question) {
             $this->say('Aguarde, estamos pesquisando....');
-			$this->cnpj = $cnpj->getText();
+			$this->cnpj = $question->getText();
 			if(is_numeric($this->cnpj)) {
                 //$ttClient = new App\GraphQL\Client\TradeToolsClient('');
                 $this->say('O status do seu último pedido é: ' . $this->cnpj);
