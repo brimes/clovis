@@ -19,7 +19,7 @@ class OrderConversation extends Conversation
             
 			if(is_numeric($this->cnpj)) {
                 $this->say("Estamos analisando seu CNPJ");
-                $ttClient = new App\GraphQL\Client\TradeToolsClient();
+                $ttClient = new \App\GraphQL\Client\TradeToolsClient();
                 $status = $ttClient->getStatusOrder($this->cnpj);
                 $this->say('O status do seu último pedido é: ' . $status);
                 return true;
