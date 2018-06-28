@@ -40,7 +40,7 @@ abstract class AbstractClient
             Log::error(
                 $exception->getMessage(),
                 [
-                    'token' => $token,
+                    //'token' => $token,
                     'query' => $query,
                     'variables' => $variables,
                 ]
