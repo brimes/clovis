@@ -3,14 +3,17 @@ namespace App\Conversation;
 
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
-
+use Log;
 class OrderConversation extends Conversation
 {
 	protected $cnpj;
     
 	public function run()
 	{
+        Log::info("Run coversation executado");
 		$this->ask('Ola, qual o seu CNPJ do PDV?', function(Answer $question) {
+            Log::info("pergunta do CNPJ");
+            Log::info("CNPJ: " . $question->getText());
             $this->ask('Ok, pesquisando', function(Answer $question) {
             });
             $this->say('Aguarde, estamos pesquisando....');
