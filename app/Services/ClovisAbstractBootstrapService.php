@@ -4,7 +4,7 @@ namespace App\Services;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
-use BotMan\BotMan\Cache\DoctrineCache;
+use BotMan\BotMan\Cache\RedisCache;
 
 abstract class ClovisAbstractBootstrapService {
 
@@ -15,7 +15,7 @@ abstract class ClovisAbstractBootstrapService {
         DriverManager::loadDriver($driver);
 
         // Create an instance
-        $this->botman = BotManFactory::create($config, new DoctrineCache($doctrineCacheDriver));
+        $this->botman = BotManFactory::create($config, new RedisCache(env('APP_REDIS_HOST'), env('APP_REDIS_PORT')));
     }
 
     public function run() {
