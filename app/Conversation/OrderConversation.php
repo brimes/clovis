@@ -16,13 +16,20 @@ class OrderConversation extends Conversation
 			
 			$ttClient = new \App\GraphQL\Client\TradeToolsClient();
 			$status = $ttClient->getStatusOrder($this->cnpj);
-			$this->say('O status do seu último pedido é: ' . $status);
+			if(!$status) {
+				$this->dontUnderstand("seu pedido não encontrado!");
+			}
+			$statusOrder = $status->status_order;
+			$date = $status->date;
+			$id = $status->id;
+			$this->say('O status do pedido ' . $id. ', enviado em ' .$date. ' é: ' . $statusOrder);
 			
 			return false;
 		});
 	}
      
-    public function dontUnderstand() {
-        $this->say('Desculpe, não entendi o que você quis dizer.');
+    public function dontUnderstand($erro = "") {
+		$this->say('Desculpe, ' . $erro);
+		return false;
     }
 }

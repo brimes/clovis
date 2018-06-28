@@ -23,14 +23,16 @@ class TradeToolsClient extends AbstractClient
         return $this->cachedToken;
     }
 
-    public function getStatusOrder($cnpj = "") : string
+    public function getStatusOrder($cnpj = "") : Object
     {
 
         $statusOrder = $this->query('{
             orderStatus (cnpj: "' .$cnpj. '") {
-                status_orders
+                status_order,
+                date,
+                id
             }
-        }')->orderStatus->status_orders;
+        }')->orderStatus;
         
         
         return $statusOrder;
