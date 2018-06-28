@@ -17,11 +17,19 @@ class TelegramBootstrapService extends ClovisAbstractBootstrapService {
     public function flow() {
 
         // Give the bot something to listen for.
-        $this->botman->hears('hello', function (BotMan $bot) {
+        $this->botman->hears('Ola', function (BotMan $bot) {
             //$ttClient = new App\GraphQL\Client\TradeToolsClient('');
             //$bot->reply('Hello: ' . $ttClient->getStatusOrder("42225938007839"));
-            $bot->reply('Hello: ' . '  Leprechown');
+            $bot->reply('Ola, qual o seu CNPJ');
         });
+
+        $this->botman->hears('([0-9]+)', function (BotMan $bot, $number) {
+            //$ttClient = new App\GraphQL\Client\TradeToolsClient('');
+            //$bot->reply('Hello: ' . $ttClient->getStatusOrder("42225938007839"));
+            $bot->reply('O seu cnpj é ' . $number);
+        });
+
+        
 
     }
 
