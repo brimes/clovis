@@ -11,6 +11,8 @@ class OrderConversation extends Conversation
 	public function run()
 	{
 		$this->ask('Ola, qual o seu CNPJ do PDV?', function(Answer $question) {
+            $this->ask('Ok, pesquisando', function(Answer $question) {
+            });
             $this->say('Aguarde, estamos pesquisando....');
 			$this->cnpj = $question->getText();
 			if(is_numeric($this->cnpj)) {
@@ -18,7 +20,7 @@ class OrderConversation extends Conversation
                 $this->say('O status do seu último pedido é: ' . $this->cnpj);
             }else{
                 $this->dontUnderstand();
-                $this->run();
+                //$this->run();
             }
 		});
 	}
