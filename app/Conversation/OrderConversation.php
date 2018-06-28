@@ -10,6 +10,7 @@ class OrderConversation extends Conversation
 	public function run()
 	{
 		$this->ask('Ola, qual o número do seu CNPJ?', function($cnpj) {
+            $this->say('Aguarde, estamos pesquisando....');
 			$this->cnpj = $cnpj->getText();
 			if(is_numeric($this->cnpj)) {
                 //$ttClient = new App\GraphQL\Client\TradeToolsClient('');
