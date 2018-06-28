@@ -15,7 +15,8 @@ abstract class ClovisAbstractBootstrapService {
         DriverManager::loadDriver($driver);
 
         // Create an instance
-        $this->botman = BotManFactory::create($config, new RedisCache(env('APP_REDIS_HOST'), env('APP_REDIS_PORT')));
+        $this->botman = BotManFactory::create($config, new RedisCache(env('APP_REDIS_HOST'), 
+        env('APP_REDIS_PORT'), env('APP_REDIS_PASSWORD')));
     }
 
     public function run() {
