@@ -6,13 +6,16 @@
     "type": "project",
     "require": {
         "php": ">=7.1",
+        "euautomation/graphql-client": "^0.2.0",
         "karlomikus/multilog": "1.2.*",
         "laravel/framework": "5.6.*",
         "laravel/horizon": "*",
         "predis/predis": "*",
         "rebing/graphql-laravel": "1.*",
         "tymon/jwt-auth": "0.5.*",
-        "laravel/tinker": "*"
+        "laravel/tinker": "*",
+        "botman/botman" : "2.2.*",
+        "botman/driver-telegram" : "^1.5"
     },
     "require-dev": {
         "codedungeon/phpunit-result-printer": "*",
