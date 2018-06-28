@@ -20,7 +20,7 @@ class TelegramBootstrapService extends ClovisAbstractBootstrapService {
         $this->botman->hears('hello', function (BotMan $bot) {
             //$ttClient = new App\GraphQL\Client\TradeToolsClient('');
             //$bot->reply('Hello: ' . $ttClient->getStatusOrder("42225938007839"));
-            $bot->reply('Hello: ' . ' Charles');
+            $bot->reply('Hello: ' . '  Leprechown');
         });
 
     }
