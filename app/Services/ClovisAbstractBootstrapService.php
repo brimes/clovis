@@ -4,6 +4,7 @@ namespace App\Services;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\BotMan\Cache\DoctrineCache;
 
 abstract class ClovisAbstractBootstrapService {
 
@@ -14,7 +15,7 @@ abstract class ClovisAbstractBootstrapService {
         DriverManager::loadDriver($driver);
 
         // Create an instance
-        $this->botman = BotManFactory::create($config);
+        $this->botman = BotManFactory::create($config, new DoctrineCache($doctrineCacheDriver));
     }
 
     public function run() {
