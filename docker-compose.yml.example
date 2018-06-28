@@ -1,0 +1,122 @@
+version: "3.0"
+
+services:
+  nginx:
+    image: 192.168.0.215:5000/nginx
+    restart: always
+    expose:
+      - "9000"
+    ports:
+     - "80:80"
+    volumes:
+     - ./config/docker/nginx_conf:/etc/nginx/conf.d
+     - ./:/var/www/html/template-ms
+     - ../tradetools:/var/www/html/tradetools
+     -  /usr/bin/ssh:/usr/bin/ssh
+     - ../yii_1_1_14:/var/www/yii_1_1_14
+     - ../extensoes:/var/www/extensoes
+    depends_on:
+      - php
+    networks:
+      - outside
+      - internal
+
+  php:
+    image: 192.168.0.215:5000/php:7.1
+    restart: always
+    command: bash -c "sed -i \"s/memory_limit = 128M/memory_limit = 1024M/\" /usr/local/etc/php/php.ini && sed -i \"s/short_open_tag = Off/short_open_tag = On/\" /usr/local/etc/php/php.ini && sed -i \"s/max_execution_time = 30/max_execution_time = 300/\" /usr/local/etc/php/php.ini && php-fpm"
+    environment:
+        PHP_XDEBUG_ENABLED: 1 # Set 1 to enable.
+        PHP_IDE_CONFIG: "serverName=docker"
+        XDEBUG_CONFIG: "remote_host=172.17.0.1"
+    ports:
+     - "2222:22" # ssh
+     - "35729:35729" # live reload
+     - "9876:9876" # karma server
+    volumes:
+     - ./:/var/www/html/template-ms
+     - ../tradetools:/var/www/html/tradetools
+     -  /usr/bin/ssh:/usr/bin/ssh
+     - ../yii_1_1_14:/var/www/yii_1_1_14
+     - ../extensoes:/var/www/extensoes
+     - ./docker/logs/xdebug/:/tmp/xdebug_log #Logs for Xdebug
+    depends_on:
+      - postgres
+      - redis
+      #- mongo
+    networks:
+      - outside
+      - internal
+
+  postgres:
+    image: 192.168.0.215:5000/postgres:9.4-para-devs
+    restart: always
+    environment:
+     - POSTGRES_USER=webadm
+     - POSTGRES_PASSWORD=A123456
+    expose:
+     - "5432"
+    volumes:
+     - ../tradetools/protected/data/:/var/lib/postgresql/tradetools/
+     - ./database/:/var/lib/postgresql/vlt/
+     - ../volumes/postgres:/var/lib/postgresql/data
+    networks:
+      - internal
+    container_name: localhost_postgres
+
+#  mongo:
+#    image: ttdev.fidelize.com.br:5000/mongo
+#    restart: always
+#    ports:
+#     - "27017:27017"
+#    volumes:
+#     - ../volumes/mongo:/data/db
+#    networks:
+#      - internal
+#    container_name: localhost_mongo
+#
+  redis:
+    image: 192.168.0.215:5000/redis:3.0
+    restart: always
+    expose:
+     - "6379"
+    networks:
+      - internal
+    container_name: localhost_redis
+
+  redis-sentinel:
+    image: 192.168.0.215:5000/redis-sentinel:3.0
+    restart: always
+    expose:
+     - "26379"
+    networks:
+      - internal
+    container_name: localhost_redis-sentinel
+
+  pgadmin:
+    image: 192.168.0.215:5000/pgadmin:4.1.2
+    restart: always
+    expose:
+     - "5050"
+    volumes:
+     - ../volumes/pgadmin:/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - outside
+      - internal
+
+volumes:
+  db-data:
+
+networks:
+networks:
+  outside:
+    external: true
+  internal:
+    driver: bridge
+
+#logging:
+#  driver: syslog
+#  options:
+#    syslog-address: "tcp://192.168.0.42:123"
