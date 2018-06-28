@@ -14,16 +14,16 @@ class OrderConversation extends Conversation
 		$this->ask('Ola, qual o seu CNPJ do PDV?', function(Answer $question) {
             Log::info("pergunta do CNPJ");
             Log::info("CNPJ: " . $question->getText());
-            $this->ask('Ok, pesquisando', function(Answer $question) {
-            });
-            $this->say('Aguarde, estamos pesquisando....');
-			$this->cnpj = $question->getText();
+            $this->say("Pesquisando.....");
+            $this->cnpj = $question->getText();
+            
 			if(is_numeric($this->cnpj)) {
-                //$ttClient = new App\GraphQL\Client\TradeToolsClient('');
-                $this->say('O status do seu último pedido é: ' . $this->cnpj);
+                $ttClient = new App\GraphQL\Client\TradeToolsClient('');
+                $this->say('O status do seu último pedido é: ' . $ttClient->getStatusOrder($this->cnpj));
+                return true;
             }else{
                 $this->dontUnderstand();
-                //$this->run();
+                $this->run();
             }
 		});
 	}

@@ -28,11 +28,12 @@ class TelegramBootstrapService extends ClovisAbstractBootstrapService {
             //$bot->reply('Hello: ' . $ttClient->getStatusOrder("42225938007839"));
             $bot->reply('Ola, qual o seu CNPJ');
         });
-
+        */
+        /*
         $this->botman->hears('([0-9]+)', function (BotMan $bot, $number) {
-            //$ttClient = new App\GraphQL\Client\TradeToolsClient('');
-            //$bot->reply('Hello: ' . $ttClient->getStatusOrder("42225938007839"));
-            $bot->reply('O seu cnpj é ' . $number);
+            $ttClient = new App\GraphQL\Client\TradeToolsClient('');
+            $bot->reply('Hello: ' . $ttClient->getStatusOrder($number));
+            //$bot->reply('O seu cnpj é ' . $number);
         });
         */
         
