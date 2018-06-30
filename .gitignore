@@ -17,3 +17,6 @@ phpunit.xml
 docker-compose.yml
 nbproject/*
 tests/coverage/*
+/.vscode
+.DS_Store
+
