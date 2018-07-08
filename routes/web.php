@@ -22,6 +22,7 @@ Route::prefix(env('APP_PREFIX', ''))->group(function () {
     })->name('home');
 });
 
+Route::match(['get','post'], '/chatwhatsapp',['uses' => 'ChatController@chatwhatsapp', 'name' => 'chatweb']);
 Route::match(['get','post'], '/chatweb',['uses' => 'ChatController@chatweb', 'name' => 'chatweb']);
 Route::match(['get','post'], '/chattelegram',['uses' => 'ChatController@chattelegram', 'name' => 'chattelegram']);
 
