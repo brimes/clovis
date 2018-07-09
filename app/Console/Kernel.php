@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\CreateUser::class,
+        \App\Console\Commands\StartAlert::class,
     ];
 
     /**

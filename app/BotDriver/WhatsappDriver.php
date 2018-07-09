@@ -20,11 +20,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class WhatsappDriver extends HttpDriver
 {
-
     const DRIVER_NAME = 'Whatsapp';
     const API_URL = 'http://panel.apiwha.com/';
-
-
 
     /**
      * Determine if the request is for this driver.
@@ -33,7 +30,7 @@ class WhatsappDriver extends HttpDriver
      */
     public function matchesRequest()
     {
-        return $this->event->event == "INBOX";
+        return true; //$this->event->event == "INBOX";
     }
 
     /**
@@ -102,20 +99,9 @@ class WhatsappDriver extends HttpDriver
      */
     public function sendPayload($payload)
     {
-        $my_apikey = $this->config->get('token');
         $destination = $this->event->from;
         $message = $payload['message']->getText();
-        $api_url = self::API_URL .  "send_message.php";
-        $api_url .= "?apikey=". urlencode ($my_apikey);
-        $api_url .= "&number=". urlencode ($destination);
-        $api_url .= "&text=". urlencode ($message);
-
-        $response = $this->http->get($api_url, [], [
-            'Content-Type: application/json',
-            'Accept: application/json',
-        ], true);
-
-        return $response;
+        return $this->sendMessageToApi($destination, $message);
     }
 
     /**
@@ -142,6 +128,24 @@ class WhatsappDriver extends HttpDriver
      */
     public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
-        return true;
+        $destination = $parameters['destination'];
+        $message = $parameters['message'];
+        return $this->sendMessageToApi($destination, $message);
     }
+
+    private function sendMessageToApi($destination, $message)
+    {
+        $my_apikey = $this->config->get('token');
+        $api_url = self::API_URL .  "send_message.php";
+        $api_url .= "?apikey=". urlencode ($my_apikey);
+        $api_url .= "&number=". urlencode ($destination);
+        $api_url .= "&text=". urlencode ($message);
+
+        $response = $this->http->get($api_url, [], [
+            'Content-Type: application/json',
+            'Accept: application/json',
+        ], true);
+
+    }
+
 }

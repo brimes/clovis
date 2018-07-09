@@ -33,5 +33,13 @@ abstract class ClovisAbstractBootstrapService
         $this->botman->listen();
     }
 
+    protected function greattingsText()
+    {
+        $greattings = [
+            'oi', 'olá', 'e ai', 'fala ae', 'hi', 'hello'
+        ];
+        return '.*(' . implode("|", $greattings) . ').*';
+    }
+
     abstract public function flow();
 }
