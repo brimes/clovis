@@ -2,21 +2,20 @@
 
 namespace App\Services;
 
+use App\BotDriver\WhatsappDriver;
 use BotMan\BotMan\BotMan;
 use App\Conversation\OrderConversation;
 
-class WebBootstrapService extends ClovisAbstractBootstrapService
+class WhatsappBootstrapService extends ClovisAbstractBootstrapService
 {
     public function __construct()
     {
         $config = [
-            'web' => [
-                'matchingData' => [
-                    'driver' => 'web',
-                ],
+            'whatsapp' => [
+                'token' => '48S2294QIDGI9MY4ZT5B',
             ]
         ];
-        parent::__construct(\BotMan\Drivers\Web\WebDriver::class, $config);
+        parent::__construct(WhatsappDriver::class, $config);
     }
 
     public function flow()
