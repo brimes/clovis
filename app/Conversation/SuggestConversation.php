@@ -19,7 +19,12 @@ class SuggestConversation extends Conversation
                     $this->response = $question->getText();
                     $this->ask($this->response . '? Olha, não deixe seu tratamento: Temos uma oferta com 50% de desconto em 3 dias. Basta responder sim que disponibilizo para você.',
                         function (Answer $question) {
-                            $this->say('Basta ir em uma farmácia e usar o seu CPF');
+                            $this->response = $question->getText();
+                            if (strtolower($this->response) == 'sim') {
+                                $this->say('Basta ir em uma farmácia e usar o seu CPF');
+                            } else {
+                                $this->say('Que pena!');
+                            }
                         }
                     );
                 } catch (\Exception $e) {
