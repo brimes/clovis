@@ -31,6 +31,11 @@ class WhatsappBootstrapService extends ClovisAbstractBootstrapService
 
         });
 
+        $this->botman->hears('Sou admin', function ($bot) {
+            $bot->startConversation(new AdminConversation());
+
+        });
+
         $this->botman->hears($this->confirmationsText(), function ($bot) {
             $bot->reply('Posso te indicar uma farmácia próxima. Dê uma olhada nessa abaixo.');
             $bot->reply('Farmácia FARMACIA TESTE. Endereço: Rua sete, 654');
@@ -61,15 +66,20 @@ class WhatsappBootstrapService extends ClovisAbstractBootstrapService
         {
             $numbers[$item->from] = 1;
         }
-        return array_keys($numbers);
+        return ['5521999734777'];
     }
 
-    public function sendInitialMessages()
+    public function sendInitialMessages($message = null)
     {
+        $defaulMessage = 'Oi! Sou o Clóvis seu assistente para tratamento. Vejo que você ainda não comprou seu RELVAR... Posso te ajudar?';
+        if (!empty($message)) {
+            $defaulMessage = $message;
+        }
+
         foreach ($this->allContacts() as $number) {
             $this->botman->sendRequest(null, [
                 'destination' => $number,
-                'message' => 'Oi! Sou o Clóvis seu assistente para tratamento. Vejo que você ainda não comprou seu RELVAR... Posso te ajudar?'
+                'message' => $defaulMessage
             ], new IncomingMessage("", "", "", ""));
         }
     }
