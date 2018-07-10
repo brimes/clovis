@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\BotDriver\WhatsappDriver;
+use App\Conversation\SuggestConversation;
 use BotMan\BotMan\BotMan;
 use App\Conversation\OrderConversation;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
@@ -25,13 +26,15 @@ class WhatsappBootstrapService extends ClovisAbstractBootstrapService
             $bot->reply('Olá seja bem vindo!');
         });
 
-//        $this->botman->hears(
-//            '([a-zA-Z ]+)',
-//            function (BotMan $bot) {
-//                $bot->getMessage()->getText();
-//                $bot->startConversation(new OrderConversation());
-//            }
-//        );
+        $this->botman->hears($this->negationsText(), function ($bot) {
+            $bot->startConversation(new SuggestConversation());
+
+        });
+
+        $this->botman->hears($this->confirmationsText(), function ($bot) {
+            $bot->reply('Posso te indicar uma farmácia próxima. Dê uma olhada nessa abaixo.');
+            $bot->reply('Farmácia FARMACIA TESTE. Endereço: Rua sete, 654');
+        });
 
         $this->botman->fallback(
             function ($bot) {
@@ -40,11 +43,35 @@ class WhatsappBootstrapService extends ClovisAbstractBootstrapService
         );
     }
 
+    protected function allContacts() {
+        $my_apikey = env('TOKEN_WHATSAPP');
+        //$number = "";
+        $type = "IN";
+        $markaspulled = "0";
+        $getnotpulledonly = "0";
+        $api_url  = "http://panel.apiwha.com/get_messages.php";
+        $api_url .= "?apikey=". urlencode ($my_apikey);
+        $api_url .= "&type=". urlencode ($type);
+        $api_url .= "&markaspulled=". urlencode ($markaspulled);
+        $api_url .= "&getnotpulledonly=". urlencode ($getnotpulledonly);
+        $my_json_result = file_get_contents($api_url, false);
+        $my_php_arr = json_decode($my_json_result);
+        $numbers = [];
+        foreach($my_php_arr as $item)
+        {
+            $numbers[$item->from] = 1;
+        }
+        return array_keys($numbers);
+    }
+
     public function sendInitialMessages()
     {
-        $this->botman->sendRequest(null, [
-            'destination' => '5521982341547',
-            'message' => 'ops'
-        ], new IncomingMessage("", "", "", ""));
+        foreach ($this->allContacts() as $number) {
+            $this->botman->sendRequest(null, [
+                'destination' => $number,
+                'message' => 'Oi! Sou o Clóvis seu assistente para tratamento. Vejo que você ainda não comprou seu RELVAR... Posso te ajudar?'
+            ], new IncomingMessage("", "", "", ""));
+        }
     }
+
 }

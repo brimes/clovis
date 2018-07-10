@@ -36,10 +36,29 @@ abstract class ClovisAbstractBootstrapService
     protected function greattingsText()
     {
         $greattings = [
-            'oi', 'olá', 'e ai', 'fala ae', 'hi', 'hello'
+            'oi', 'olá', 'ola', 'e ai', 'e aí', 'fala ae', 'hi', 'hello'
         ];
-        return '.*(' . implode("|", $greattings) . ').*';
+        return '(' . implode("|", $greattings) . ')';
     }
+
+    protected function negationsText()
+    {
+        $negations = [
+            'nao', 'não', 'negativo', 'nem pensar', 'não pode', 'não to afim', 'não enche'
+        ];
+        return '(' . implode("|", $negations) . ').*';
+
+    }
+
+    protected function confirmationsText()
+    {
+        $negations = [
+            'sim', 'pode', 'claro', 'claro que sim', 'positivo', 'quero'
+        ];
+        return '(' . implode("|", $negations) . ')';
+
+    }
+
 
     abstract public function flow();
 }
