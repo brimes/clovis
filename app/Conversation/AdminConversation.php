@@ -31,13 +31,15 @@ class AdminConversation extends Conversation
                                     $this->response = $question->getText();
                                     if (strtolower($this->response) == 'sim') {
                                         $this->say('Ok, enviado');
+                                        $waService = new WhatsappBootstrapService();
+                                        $waService->sendInitialMessages();
                                         return true;
                                     }
                                     $this->ask('Qual mensagem voce deseja enviar?', function (Answer $question) {
                                         $this->response = $question->getText();
                                         $this->say('Ok, enviada a mensagem: ' . $this->response);
                                         $waService = new WhatsappBootstrapService();
-                                        $waService->sendInitialMessages();
+                                        $waService->sendInitialMessages($this->response);
                                     });
 
                                 });
