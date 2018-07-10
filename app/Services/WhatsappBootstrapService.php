@@ -72,15 +72,15 @@ class WhatsappBootstrapService extends ClovisAbstractBootstrapService
 
     public function sendInitialMessages($message = null)
     {
-        $defaulMessage = 'Oi! Sou o Clóvis seu assistente para tratamento. Vejo que você ainda não comprou seu RELVAR... Posso te ajudar?';
+        $defaultMessage = 'Oi! Sou o Clóvis seu assistente para tratamento. Vejo que você ainda não comprou seu RELVAR... Posso te ajudar?';
         if (!empty($message)) {
-            $defaulMessage = $message;
+            $defaultMessage = $message;
         }
 
         foreach ($this->allContacts() as $number) {
             $this->botman->sendRequest(null, [
                 'destination' => $number,
-                'message' => $defaulMessage
+                'message' => $defaultMessage
             ], new IncomingMessage("", "", "", ""));
         }
     }
