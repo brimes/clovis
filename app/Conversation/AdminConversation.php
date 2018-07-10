@@ -20,7 +20,7 @@ class AdminConversation extends Conversation
                 try {
                     $this->password = $question->getText();
                     if ($this->password != 'clovis the best') {
-                        $this->dontUnderstand("Acho que você digitou a senha errada.");
+                        $this->dontUnderstand("Acho que você digitou a senha errada. Se voce é admin diga \"sou admin\" novamente");
                         return true;
                     }
                     $this->ask('Show, senha correta. Deseja enviar a mensagem para todos os contatos?.',

@@ -67,7 +67,7 @@ class WhatsappBootstrapService extends ClovisAbstractBootstrapService
         {
             $numbers[$item->from] = 1;
         }
-        return ['5521999734777'];
+        return ['5521999734777', '5511975140530'];
     }
 
     public function sendInitialMessages($message = null)
