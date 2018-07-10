@@ -36,9 +36,9 @@ abstract class ClovisAbstractBootstrapService
     protected function greattingsText()
     {
         $greattings = [
-            'oi', 'olá', 'ola', 'e ai', 'e aí', 'fala ae', 'hi', 'hello'
+            'oi', 'olá', 'ola', 'e ai', 'e aí', 'fala ae', 'hi', 'hello', 'olá, clovis'
         ];
-        return '(' . implode("|", $greattings) . ')';
+        return '(' . implode("|", $greattings) . ').*';
     }
 
     protected function negationsText()
