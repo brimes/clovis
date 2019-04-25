@@ -33,12 +33,12 @@ class WhatsappBootstrapService
 
         error_log('REDIS: ' . Cache::store('redis')->get($to));
 
-        if (Cache::store('redis')->get($to) != 0) {
+        if (Cache::store('redis')->get($to) != 'hello') {
             $body = $_POST['Body'];
         }
 
         $content = $this->getResponse($body, $to);
-        Cache::store('redis')->put($to, 1, 600); // 10 Minute
+        Cache::store('redis')->put($to, 'hello', 600); // 10 Minute
 
 
         $message = $twilio->messages
@@ -66,7 +66,7 @@ class WhatsappBootstrapService
 
         switch (strtolower($output[1])) {
             case 'clear':
-                Cache::store('redis')->put($to, 0, 600);
+                Cache::store('redis')->put($to, 'clear', 600);
                 return 'Histórico de conversas apagado';
             case 'status':
                 return $this->consultaStatusPedido($output[2]);
