@@ -66,7 +66,7 @@ class WhatsappBootstrapService
 
         switch (strtolower($output[1])) {
             case 'clear':
-                Cache::store('redis')->put($to, 0, 0);
+                Cache::store('redis')->put($to, 0, 600);
                 return 'Histórico de conversas apagado';
             case 'status':
                 return $this->consultaStatusPedido($output[2]);
