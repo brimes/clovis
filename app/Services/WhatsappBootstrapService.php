@@ -47,6 +47,29 @@ class WhatsappBootstrapService
             return 'Desculpe, não entendi a sua mensagem';
         }
 
-        return 'Olá, sou o clóvis. Bem vindo ao whatsapp da funcional';
+        preg_match('/(\w+)\s+(\d+)/i', $input, $output);
+
+        if (empty($output)) {
+            return 'Olá, sou o clóvis. Bem vindo ao whatsapp da funcional';
+        }
+
+        switch (strtolower($output[1])) {
+            case 'status':
+                return $this->consultaStatusPedido($output[2]);
+            default:
+                return 'Desculpe, não entendi a sua mensagem';
+        }
+    }
+
+    protected function consultaStatusPedido($cnpj)
+    {
+        $array = [
+            0 => 'CNPJ INVÁLIDO',
+            1 => 'PEDIDO ACEITO COM SUCESSO',
+            2 => 'PEDIDO PARCIALMENTE ACEITO',
+            3 => 'PEDIDO REJEITADO',
+        ];
+
+        return $array[$cnpj] ?? 'ERRO DESCONHECIDO';
     }
 }
