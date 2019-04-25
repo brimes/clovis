@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Cache;
-use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class WhatsappBootstrapService
 {
@@ -36,7 +35,7 @@ class WhatsappBootstrapService
             $body = $_POST['Body'];
         }
 
-        $content = $this->getResponse($body);
+        $content = $this->getResponse($body, $to);
         Cache::store('redis')->put($to, 'hello', 600); // 10 Minute
 
 
@@ -51,19 +50,22 @@ class WhatsappBootstrapService
         error_log($message->sid);
     }
 
-    protected function getResponse(string $input)
+    protected function getResponse(string $input, $to)
     {
         if (empty($input)) {
             return 'Olá, sou o clóvis. Bem vindo ao whatsapp da funcional';
         }
 
-        preg_match('/(\w+)\s+(\d+)/i', $input, $output);
+        preg_match('/(\w+)\s*(\d*)/i', $input, $output);
 
         if (empty($output)) {
             return 'Desculpe, não entendi a sua mensagem';
         }
 
         switch (strtolower($output[1])) {
+            case 'clear':
+                Cache::store('redis')->delete($to);
+                return 'Histórico de conversas apagado';
             case 'status':
                 return $this->consultaStatusPedido($output[2]);
             default:
