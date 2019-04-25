@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Twilio\Rest\Client;
+use Illuminate\Support\Facades\Cache;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
 class WhatsappBootstrapService
