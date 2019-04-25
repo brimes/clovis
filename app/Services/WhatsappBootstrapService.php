@@ -31,6 +31,8 @@ class WhatsappBootstrapService
 
         $body = '';
 
+        error_log('REDIS: ' . Cache::store('redis')->get($to));
+
         if (Cache::store('redis')->get($to) != 0) {
             $body = $_POST['Body'];
         }
