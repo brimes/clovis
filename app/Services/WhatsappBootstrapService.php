@@ -33,7 +33,7 @@ class WhatsappBootstrapService
 
         error_log('REDIS: ' . Cache::store('redis')->get($to));
 
-        if (Cache::store('redis')->get($to) != 'hello') {
+        if (Cache::store('redis')->get($to) === 'hello') {
             $body = $_POST['Body'];
         }
 
