@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Cache;
 use Twilio\Rest\Client;
 
 class WhatsappBootstrapService {
@@ -28,12 +28,13 @@ class WhatsappBootstrapService {
 
 		$body = '';
 
-		if (Redis::exists($to)) {
+		if (Cache::has($to)) {
+			error_log('REDIS: ' . Cache::get($to));
 			$body = $_POST['Body'];
 		}
 
 		$content = $this->getResponse($body, $to);
-		Redis::set($to, 1, 60);
+		Cache::put($to, '1', 600);
 
 		$message = $twilio->messages
 			->create($to, // to
@@ -59,7 +60,7 @@ class WhatsappBootstrapService {
 
 		switch (strtolower($output[1])) {
 		case 'clear':
-			Redis::del($to);
+			Cache::forget($to);
 			return 'Histórico de conversas apagado';
 		case 'status':
 			return $this->consultaStatusPedido($output[2]);
