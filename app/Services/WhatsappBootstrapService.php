@@ -29,7 +29,16 @@ class WhatsappBootstrapService
         $twilio = new Client($sid, $token);
         $to = $_POST['From'];
 
-        $content = $this->getResponse($_POST['Body'] ?? '');
+        $body = '';
+
+        if (Cache::store('redis')->get($to)) {
+            $body = $_POST['Body'];
+        }
+
+        $content = $this->getResponse($body);
+        Cache::store('redis')->put($to, 'hello', 600); // 10 Minute
+
+
         $message = $twilio->messages
             ->create($to, // to
                 array(
@@ -44,13 +53,13 @@ class WhatsappBootstrapService
     protected function getResponse(string $input)
     {
         if (empty($input)) {
-            return 'Desculpe, não entendi a sua mensagem';
+            return 'Olá, sou o clóvis. Bem vindo ao whatsapp da funcional';
         }
 
         preg_match('/(\w+)\s+(\d+)/i', $input, $output);
 
         if (empty($output)) {
-            return 'Olá, sou o clóvis. Bem vindo ao whatsapp da funcional';
+            return 'Desculpe, não entendi a sua mensagem';
         }
 
         switch (strtolower($output[1])) {
