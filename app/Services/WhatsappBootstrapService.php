@@ -32,9 +32,9 @@ class WhatsappBootstrapService {
 			error_log('REDIS: ' . Cache::get($to));
 			$body = $_POST['Body'];
 		}
+		Cache::put($to, '1', 600);
 
 		$content = $this->getResponse($body, $to);
-		Cache::put($to, '1', 600);
 
 		$message = $twilio->messages
 			->create($to, // to
