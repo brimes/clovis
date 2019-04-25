@@ -2,87 +2,51 @@
 
 namespace App\Services;
 
-use App\BotDriver\WhatsappDriver;
-use App\Conversation\AdminConversation;
-use App\Conversation\SuggestConversation;
-use BotMan\BotMan\BotMan;
-use App\Conversation\OrderConversation;
+use Twilio\Rest\Client;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
-class WhatsappBootstrapService extends ClovisAbstractBootstrapService
+class WhatsappBootstrapService
 {
+    protected $config;
+
     public function __construct()
     {
-        $config = [
+        $this->config = [
             'whatsapp' => [
-                'token' => env('TOKEN_WHATSAPP'),
+                'token' => env('TWILIO_WHATSAPP_TOKEN')  ,
+                'sid' => env('TWILIO_WHATSAPP_SID'),
             ]
         ];
-        parent::__construct(WhatsappDriver::class, $config);
     }
 
-    public function flow()
+    public function run()
     {
-        $this->botman->hears($this->greattingsText(), function ($bot) {
-            $bot->reply('Olá seja bem vindo!');
-        });
+        error_log(print_r($_POST, true));
 
-        $this->botman->hears($this->negationsText(), function ($bot) {
-            $bot->startConversation(new SuggestConversation());
+        $sid      = $this->config['whatsapp']['sid'];
+        $token      = $this->config['whatsapp']['token'];
 
-        });
+        $twilio = new Client($sid, $token);
+        $to = $_POST['From'];
 
-        $this->botman->hears('Sou admin', function ($bot) {
-            $bot->startConversation(new AdminConversation());
+        $content = $this->getResponse($_POST['Body'] ?? '');
+        $message = $twilio->messages
+            ->create($to, // to
+                array(
+                    "from" => "whatsapp:+14155238886",
+                    "body" => $content
+                )
+            );
 
-        });
-
-        $this->botman->hears($this->confirmationsText(), function ($bot) {
-            $bot->reply('Posso te indicar uma farmácia próxima. Dê uma olhada nessa abaixo.');
-            $bot->reply('Farmácia FARMACIA TESTE. Endereço: Rua sete, 654');
-        });
-
-        $this->botman->fallback(
-            function ($bot) {
-                $bot->reply('Desculpe, não entendi o que você quis dizer.');
-            }
-        );
+        error_log($message->sid);
     }
 
-    protected function allContacts() {
-        $my_apikey = env('TOKEN_WHATSAPP');
-        //$number = "";
-        $type = "IN";
-        $markaspulled = "0";
-        $getnotpulledonly = "0";
-        $api_url  = "http://panel.apiwha.com/get_messages.php";
-        $api_url .= "?apikey=". urlencode ($my_apikey);
-        $api_url .= "&type=". urlencode ($type);
-        $api_url .= "&markaspulled=". urlencode ($markaspulled);
-        $api_url .= "&getnotpulledonly=". urlencode ($getnotpulledonly);
-        $my_json_result = file_get_contents($api_url, false);
-        $my_php_arr = json_decode($my_json_result);
-        $numbers = [];
-        foreach($my_php_arr as $item)
-        {
-            $numbers[$item->from] = 1;
-        }
-        return array_keys($numbers);
-    }
-
-    public function sendInitialMessages($message = null)
+    protected function getResponse(string $input)
     {
-        $defaultMessage = 'Oi! Sou o Clóvis seu assistente para tratamento. Vejo que você ainda não comprou seu RELVAR... Posso te ajudar?';
-        if (!empty($message)) {
-            $defaultMessage = $message;
+        if (empty($input)) {
+            return 'Desculpe, não entendi a sua mensagem';
         }
 
-        foreach ($this->allContacts() as $number) {
-            $this->botman->sendRequest(null, [
-                'destination' => $number,
-                'message' => $defaultMessage
-            ], new IncomingMessage("", "", "", ""));
-        }
+        return 'Olá, sou o clóvis. Bem vindo ao whatsapp da funcional';
     }
-
 }

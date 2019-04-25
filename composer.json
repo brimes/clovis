@@ -17,6 +17,7 @@
         "laravel/tinker": "*",
         "predis/predis": "*",
         "rebing/graphql-laravel": "1.*",
+        "twilio/sdk": "^5.31",
         "tymon/jwt-auth": "0.5.*"
     },
     "require-dev": {
